@@ -1,0 +1,3 @@
+import { NextResponse } from 'next/server'
+import { saveKeys } from '@/lib/secure-keys'
+export async function POST(req:Request){try{const body=await req.json();const allowed=['mistral','groq','cerebras','openai','openrouter'];const keys=Object.fromEntries(allowed.map(k=>[k,typeof body[k]==='string'?body[k].trim():'']).filter(([,v])=>v));await saveKeys(keys);return NextResponse.json({ok:true})}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Unable to save keys'},{status:500})}}
